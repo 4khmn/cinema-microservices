@@ -1,9 +1,7 @@
-package org.example.catalog.entity;
+package org.example.inventory.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -11,20 +9,16 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@Table(name="directors")
-public class Director {
+@Table(name="halls")
+public class Hall {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false)
     private String name;
 
-
-
-
-    @OneToMany(mappedBy = "director")
-    private List<Movie> movies;
+    private Integer totalRows;
+    private Integer seatsPerRow;
 }
