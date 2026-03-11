@@ -3,6 +3,7 @@ package org.example.catalog.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.catalog.dto.ActorCreate;
+import org.example.catalog.dto.ActorResponse;
 import org.example.catalog.entity.Actor;
 import org.example.catalog.service.ActorService;
 import org.springframework.web.bind.annotation.*;
@@ -19,25 +20,25 @@ public class ActorController {
 
 
     @GetMapping("/actors/{id}")
-    public Actor getById(@RequestParam("id") Long id){
+    public ActorResponse getById(@RequestParam("id") Long id){
         log.info("start");
-        Actor actor = actorService.getById(id);
+        ActorResponse actor = actorService.getById(id);
         log.info("end");
         return actor;
     }
 
     @GetMapping("/actors")
-    public List<Actor> getAll(){
+    public List<ActorResponse> getAll(){
         log.info("start");
-        List<Actor> actors = actorService.getAll();
+        List<ActorResponse> actors = actorService.getAll();
         log.info("end");
         return actors;
     }
 
     @PostMapping("/actors")
-    public Actor create(@RequestBody ActorCreate actor){
+    public ActorResponse create(@RequestBody ActorCreate actor){
         log.info("start");
-        Actor createdActor = actorService.save(actor);
+        ActorResponse createdActor = actorService.save(actor);
         log.info("end");
         return createdActor;
     }

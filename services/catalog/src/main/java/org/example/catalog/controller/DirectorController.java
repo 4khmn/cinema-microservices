@@ -2,9 +2,9 @@ package org.example.catalog.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.catalog.entity.Actor;
-import org.example.catalog.entity.Director;
-import org.example.catalog.repository.DirectorRepository;
+import org.example.catalog.dto.DirectorCreate;
+import org.example.catalog.dto.DirectorResponse;
+import org.example.catalog.service.DirectorService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,29 +15,29 @@ import java.util.List;
 @RequestMapping("/api")
 public class DirectorController {
 
-    private final DirectorRepository directorRepository;
+    private final DirectorService directorService;
 
     @GetMapping("/directors/{id}")
-    public Director getById(@RequestParam("id") Long id){
+    public DirectorResponse getById(@RequestParam("id") Long id){
         log.info("start");
-        Director byId = directorRepository.getById(id);
+        DirectorResponse byId = directorService.getById(id);
         log.info("end");
         return byId;
     }
 
 
     @GetMapping("/directors")
-    public List<Director> getAll(){
+    public List<DirectorResponse> getAll(){
         log.info("start");
-        List<Director> directors = directorRepository.findAll();
+        List<DirectorResponse> directors = directorService.getAll();
         log.info("end");
         return directors;
     }
 
     @PostMapping("/directors")
-    public Director createActor(@RequestBody Director director){
+    public DirectorResponse createActor(@RequestBody DirectorCreate director){
         log.info("start");
-        Director savedDirector = directorRepository.save(director);
+        DirectorResponse savedDirector = directorService.save(director);
         log.info("end");
         return savedDirector;
     }

@@ -2,7 +2,10 @@ package org.example.catalog.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.catalog.dto.DirectorCreate;
+import org.example.catalog.dto.DirectorResponse;
 import org.example.catalog.entity.Director;
+import org.example.catalog.mapper.DirectorMapper;
 import org.example.catalog.repository.DirectorRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +16,22 @@ import java.util.List;
 public class DirectorService {
 
     private final DirectorRepository directorRepository;
+    private final DirectorMapper mapper;
 
-    public Director getById(Long id) {
-        return directorRepository.findById(id).orElseThrow(
+    public DirectorResponse getById(Long id) {
+        Director director = directorRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Director with id " + id + " not found")
         );
+        return mapper.toDto(director);
     }
 
-    public List<Director> getAll() {
-        return directorRepository.findAll();
+    public List<DirectorResponse> getAll() {
+        List<Director> all = directorRepository.findAll();
+        return all.stream().map(mapper::toDto).toList();
     }
 
-    public Director save(Director director){
-        return directorRepository.save(director);
+    public DirectorResponse save(DirectorCreate director){
+        Director savedDirector = directorRepository.save(mapper.toEntity(director));
+        return mapper.toDto(savedDirector);
     }
 }
