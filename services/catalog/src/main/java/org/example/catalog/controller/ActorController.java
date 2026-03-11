@@ -20,7 +20,7 @@ public class ActorController {
 
 
     @GetMapping("/actors/{id}")
-    public ActorResponse getById(@RequestParam("id") Long id){
+    public ActorResponse getById(@PathVariable("id") Long id){
         log.info("start");
         ActorResponse actor = actorService.getById(id);
         log.info("end");

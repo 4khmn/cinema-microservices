@@ -2,7 +2,8 @@ package org.example.inventory.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.inventory.entity.Hall;
+import org.example.inventory.dto.HallCreate;
+import org.example.inventory.dto.HallResponse;
 import org.example.inventory.service.HallService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,26 +18,26 @@ public class HallController {
     private final HallService hallService;
 
     @GetMapping("/halls/{id}")
-    public Hall getById (@PathVariable("id") Long id) {
+    public HallResponse getById (@PathVariable("id") Long id) {
         log.info("start");
-        Hall hall = hallService.getById(id);
+        HallResponse hall = hallService.getById(id);
         log.info("end");
         return hall;
     }
 
 
     @GetMapping("/halls")
-    public List<Hall> getAll (){
+    public List<HallResponse> getAll (){
         log.info("start");
-        List<Hall> halls = hallService.getAll();
+        List<HallResponse> halls = hallService.getAll();
         log.info("end");
         return halls;
     }
 
     @PostMapping("/halls")
-    public Hall createHall(@RequestBody Hall hall){
+    public HallResponse createHall(@RequestBody HallCreate hall){
         log.info("start");
-        Hall savedHall = hallService.save(hall);
+        HallResponse savedHall = hallService.save(hall);
         log.info("end");
         return savedHall;
     }

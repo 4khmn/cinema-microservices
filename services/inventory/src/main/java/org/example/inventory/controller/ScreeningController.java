@@ -2,7 +2,7 @@ package org.example.inventory.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.inventory.dto.ScreeningRequest;
+import org.example.inventory.dto.ScreeningCreate;
 import org.example.inventory.dto.ScreeningResponse;
 import org.example.inventory.entity.Screening;
 import org.example.inventory.service.ScreeningService;
@@ -18,7 +18,7 @@ public class ScreeningController {
 
     private final ScreeningService screeningService;
 
-    @GetMapping("/screening/{id}")
+    @GetMapping("/screenings/{id}")
     public ScreeningResponse getById(@PathVariable("id") Long id) {
         log.info("start");
         ScreeningResponse screening = screeningService.getById(id);
@@ -26,18 +26,18 @@ public class ScreeningController {
         return screening;
     }
 
-    @GetMapping("/screening")
-    public List<Screening> getAll() {
+    @GetMapping("/screenings")
+    public List<ScreeningResponse> getAll() {
         log.info("start");
-        List<Screening> screenings = screeningService.getAll();
+        List<ScreeningResponse> screenings = screeningService.getAll();
         log.info("end");
         return screenings;
     }
 
-    @PostMapping("/screening")
-    public ScreeningResponse createScreening(@RequestBody ScreeningRequest screening) {
+    @PostMapping("/screenings")
+    public ScreeningResponse createScreening(@RequestBody ScreeningCreate screening) {
         log.info("start");
-        ScreeningResponse savedScreening = screeningService.saveScreening(screening);
+        ScreeningResponse savedScreening = screeningService.save(screening);
         log.info("end");
         return savedScreening;
     }

@@ -4,11 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.inventory.client.MovieClient;
 import org.example.inventory.dto.MovieDto;
-import org.example.inventory.dto.ScreeningRequest;
+import org.example.inventory.dto.ScreeningCreate;
 import org.example.inventory.dto.ScreeningResponse;
 import org.example.inventory.entity.Hall;
 import org.example.inventory.entity.Screening;
 import org.example.inventory.entity.Seat;
+import org.example.inventory.mapper.ScreeningMapper;
 import org.example.inventory.repository.HallRepository;
 import org.example.inventory.repository.ScreeningRepository;
 import org.example.inventory.repository.SeatRepository;
@@ -23,55 +24,26 @@ public class ScreeningService {
 
     private final ScreeningRepository screeningRepository;
     private final SeatRepository seatRepository;
-    private final MovieClient movieClient;
-    private final HallRepository hallRepository;
+    private final ScreeningMapper mapper;
 
     public ScreeningResponse getById(Long id) {
         Screening screening = screeningRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Screening with id " + id + " not found"));
 
-        MovieDto movie = movieClient.getMovieById(screening.getMovieId());
 
-        return ScreeningResponse.builder()
-                .id(screening.getId())
-                .movieTitle(movie.title())
-                .hallName(screening.getHall().getName())
-                .startTime(screening.getStartTime())
-                .price(screening.getPrice())
-                .build();
+        return mapper.toDto(screening);
     }
 
-    public List<Screening> getAll() {
-        return screeningRepository.findAll();
+    public List<ScreeningResponse> getAll() {
+        List<Screening> screenings = screeningRepository.findAll();
+        return screenings.stream().map(mapper::toDto).toList();
     }
 
     @Transactional
-    public ScreeningResponse saveScreening(ScreeningRequest request) {
-        Hall hall = hallRepository.findById(request.hallId()).orElseThrow(
-                () -> new EntityNotFoundException("Hall with id " + request.hallId() + " not found"));
-        Screening screening = Screening.builder()
-                .hall(hall)
-                .price(request.price())
-                .startTime(request.startTime())
-                .movieId(request.movieId())
-                .build();
-        return save(screening);
-    }
-
-    private ScreeningResponse save(Screening screening) {
-        Screening save = screeningRepository.save(screening);
-        createSeatsForScreening(screening);
-
-        MovieDto movieDto = movieClient.getMovieById(screening.getMovieId());
-
-        ScreeningResponse response = ScreeningResponse.builder()
-                .price(screening.getPrice())
-                .id(screening.getId())
-                .movieTitle(movieDto.title())
-                .hallName(screening.getHall().getName())
-                .startTime(screening.getStartTime())
-                .build();
-        return response;
+    public ScreeningResponse save(ScreeningCreate dto) {
+        Screening savedScreening = screeningRepository.save(mapper.toEntity(dto));
+        createSeatsForScreening(savedScreening);
+        return mapper.toDto(savedScreening);
     }
 
     private void createSeatsForScreening(Screening screening) {

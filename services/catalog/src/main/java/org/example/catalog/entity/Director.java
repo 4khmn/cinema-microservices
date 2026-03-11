@@ -23,6 +23,7 @@ public class Director {
     private String name;
 
 
+    private Integer age;
 
 
     @OneToMany(mappedBy = "director")

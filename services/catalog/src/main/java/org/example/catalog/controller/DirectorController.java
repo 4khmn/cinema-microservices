@@ -18,7 +18,7 @@ public class DirectorController {
     private final DirectorService directorService;
 
     @GetMapping("/directors/{id}")
-    public DirectorResponse getById(@RequestParam("id") Long id){
+    public DirectorResponse getById(@PathVariable("id") Long id){
         log.info("start");
         DirectorResponse byId = directorService.getById(id);
         log.info("end");
