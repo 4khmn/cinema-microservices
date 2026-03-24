@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.inventory.dto.ScreeningCreate;
 import org.example.inventory.dto.ScreeningResponse;
-import org.example.inventory.entity.Screening;
 import org.example.inventory.service.ScreeningService;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +40,4 @@ public class ScreeningController {
         log.info("end");
         return savedScreening;
     }
-
-
-
-
-
 }
